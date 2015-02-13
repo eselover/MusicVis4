@@ -27,9 +27,9 @@ void setup()
 
 void draw()
 {
-   noStroke();
-   fill(0, 0, 0, trail);
-   rect(0, 0, width, height);
+  noStroke();
+  fill(0, 0, 0, trail);
+  rect(0, 0, width, height);
   float time = millis()/1000.0;
 
   beat.detectMode(BeatDetect.FREQ_ENERGY);
@@ -39,36 +39,39 @@ void draw()
   rotateX(cos(time / 2));
   rotateY(sin(time / 2));
   rotateZ(cos(time / 2) + sin(time / 2));
+  scale(map(mouseX, 0, width, .5, 3));
 
-  if (beat.isKick())
-  {
-    stroke(255, 0, 0);
-    noFill();
-    pushMatrix();
-    rotateX(sin(time) + cos(time));
-    rotateY(cos(time));
-    rotateZ(atan(time));
-    box(300);
-    popMatrix();
-    
-    trail = 1;
-  }
+  drawRedCube(time);
+  drawGreenCube(time);
 
-  if (beat.isSnare())
-  {
-    stroke(0, 255, 0);
-    noFill();
-    pushMatrix();
-    rotateX(tan(time));
-    rotateY(time);
-    rotateZ(cos(time));
-    box(100);
-    popMatrix();
-  }
   stroke(R, G, 255);
   noFill();
   box(400);
-  
+
   trail = 30;
+}
+
+void drawRedCube(float time) {
+  stroke(255, 0, 0);
+  if (beat.isKick()) fill(255, 0, 0);
+  else noFill();
+  pushMatrix();
+  rotateX(sin(time) + cos(time));
+  rotateY(cos(time));
+  rotateZ(atan(time));
+  box(beat.isKick() ? 500 : 300);
+  popMatrix();
+  trail = 1;
+}
+void drawGreenCube(float time) {
+  stroke(0, 255, 0);
+  if (beat.isSnare()) fill(0, 255, 0);
+  else noFill();
+  pushMatrix();
+  rotateX(tan(time));
+  rotateY(time);
+  rotateZ(cos(time));
+  box(beat.isSnare() ? 400 : 100);
+  popMatrix();
 }
 
